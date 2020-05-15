@@ -4,13 +4,15 @@
 
 <form action="/campgrounds" method="POST">
     <label for="name">Name: 
-        <input id ="name" type="text" name="name">
+        <input id ="name" type="text" name="name" placeholder="Name">
     </label>
         <label for="url">Image URL: 
-        <input id ="url" type="text" name="image_url">
+        <input id ="url" type="text" name="image_url" placeholder="Image url">
     </label>
     <button>add!</button>
 
 </form>
 
+
+<a href="/campgrounds">go back</a>
 <%- include ('partials/footer') %>
