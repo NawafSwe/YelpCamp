@@ -42,16 +42,16 @@ let campgroundSchema = new mongoose.Schema({
 let Campground = mongoose.model('campground', campgroundSchema);
 
 
-app.get('/campgrounds', (req, res) => { 
-  Campground.find({}, (err,camps) => {
+/*---------------------------- app routes ---------------------------- */
+
+
+app.get('/campgrounds', (req, res) => {
+  Campground.find({}, (err, camps) => {
     if (err) console.log('error', err);
-    else res.render('campgrounds', { camp_grounds_list: camps});;
+    else res.render('campgrounds', { camp_grounds_list: camps });
   });
-
-
 });
 
-/*---------------------------- app routes ---------------------------- */
 
 /* this route is the INDEX ROUTE  --  '/campgrounds' is the initial route where render the home page*/
 app.get('/campgrounds', (req, res) => {
