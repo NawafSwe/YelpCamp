@@ -58,18 +58,7 @@ let campgroundSchema = new mongoose.Schema({
   image_url: String
 });
 let Campground = mongoose.model('campground', campgroundSchema);
-/*Campground.create({
-  name: 'ksa',
-  image_url:
-    'https://koa.com/blog/images/make-tent-camping-more-comfortable.jpg?preset=blogPhoto'
-}
-  , (err, campground) => { 
-    if (err)
-      console.log('not added');
-    else
-      console.log('successfully added');
-  }
-);*/
+
 
 app.get('/campgrounds', (req, res) => { 
   Campground.find({}, (err,camps) => {
@@ -77,7 +66,7 @@ app.get('/campgrounds', (req, res) => {
     else res.render('campgrounds', { camp_grounds_list: camps});;
   });
 
-  
+
 });
 
 
@@ -88,7 +77,16 @@ app.get('/campgrounds', (req, res) => {
 app.post('/campgrounds', (req, res) => {
   const name = req.body.name;
   const image_url = req.body.image_url;
-  camp_grounds_list.push(create_campground(name, image_url));
+  Campground.create(
+    {
+      name: name,
+      image_url: image_url
+    },
+    (err, campground) => {
+      if (err) console.log('not added');
+      else console.log('successfully added',campground);
+    }
+  );
   res.redirect('campgrounds');
  });
 
