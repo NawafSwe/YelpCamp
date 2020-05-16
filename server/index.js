@@ -33,29 +33,11 @@ app.listen(port, () => {
 });
 
 
-/*---------------------------- app routes ---------------------------- */
-
-/* this route '/' is the initial route where render the home page*/
-app.get('/', (req, res) => {
-    res.render('home');
-});
- 
-/* this route get '/campgrounds' is going to show all campgrounds info
-    campgrounds are lists of the format 
-    [
-    {name:name,
-    image_url: url
-    }
-    ]
-
-    we will take the data from the data base later on ;; 
-
-*/
-
 /*---------------------------- now creating our models and schema ---------------------------- */
 let campgroundSchema = new mongoose.Schema({
   name: String,
-  image_url: String
+  image_url: String,
+  description: String 
 });
 let Campground = mongoose.model('campground', campgroundSchema);
 
@@ -69,38 +51,69 @@ app.get('/campgrounds', (req, res) => {
 
 });
 
+/*---------------------------- app routes ---------------------------- */
 
-/* this routs is to post '/campgrounds' new camp ground to the list camp_grounds_list and later on to the data base 
+/* this route is the INDEX ROUTE  --  '/campgrounds' is the initial route where render the home page*/
+app.get('/campgrounds', (req, res) => {
+    res.render('home');
+});
+ 
+
+
+
+
+/* this route  is the CREATE ROUTE --  to post '/campgrounds' new camp ground to the  to the data base 
     by taking the data from a form
   */
 
 app.post('/campgrounds', (req, res) => {
   const name = req.body.name;
   const image_url = req.body.image_url;
-  Campground.create(
-    {
+  const description = req.body.description;
+  const new_camp_ground =  {
       name: name,
-      image_url: image_url
-    },
-    (err, campground) => {
-      if (err) console.log('not added');
-      else console.log('successfully added',campground);
+      image_url: image_url,
+      description: description
     }
-  );
+  Campground.create(new_camp_ground, (err, campground) => {
+    if (err) console.log('not added');
+    else console.log('successfully added', campground);
+  });
   res.redirect('campgrounds');
  });
 
 
- /* this route '/campgrounds/new' is to get the form using the convention of RESTApi naming      */
+ /* this route is the NEW ROUTE -- '/campgrounds/new' is to get the form using the convention of RESTApi naming      */
 /* a function to generate an object of campground*/
 app.get('/campgrounds/new', (req, res) => { 
   res.render('new');
 });
 
-const create_campground = (campName, url) => {
+
+/* this route is SHOW ROUTE -- '/campgrounds/:id'
+where it shows more info about a particular campground
+*/
+
+app.get('/campgrounds/:id', (req, res) => { 
+  Campground.find({id: req.body.param.id}, (err, target) => {
+    if (err) console.log('something went wrong');
+    else res.render('campground_info', { camp_info: target });
+  }
+    
+   );
+  
+  
+});
+
+
+
+/* ---------------------------- helper functions ----------------------------*/
+// this function is for creating an object of campground.
+const create_campground = (campName, url,description) => {
   return {
     name: campName,
-    image_url: url
+    image_url: url,
+    description: description
   }
 }
 
