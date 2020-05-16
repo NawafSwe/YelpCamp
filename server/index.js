@@ -27,7 +27,7 @@ mongoose.connect(uri, {
 });
 
 /*---------------------------- testing the connection of the server ----------------------------*/
-const port = 5600;
+const port = 5700;
 app.listen(port, () => {
   console.log(`server is running on ${port}`);
 });
@@ -48,13 +48,13 @@ let Campground = mongoose.model('campground', campgroundSchema);
 app.get('/campgrounds', (req, res) => {
   Campground.find({}, (err, camps) => {
     if (err) console.log('error', err);
-    else res.render('campgrounds', { camp_grounds_list: camps });
+    else res.render('index', { camp_grounds_list: camps });
   });
 });
 
 
-/* this route is the INDEX ROUTE  --  '/campgrounds' is the initial route where render the home page*/
-app.get('/campgrounds', (req, res) => {
+/* this route is the INDEX ROUTE  --  '/' is the initial route where render the home page*/
+app.get('/', (req, res) => {
     res.render('home');
 });
  
@@ -94,16 +94,18 @@ app.get('/campgrounds/new', (req, res) => {
 where it shows more info about a particular campground
 */
 
-app.get('/campgrounds/:id', (req, res) => { 
-  Campground.find({id: req.body.param.id}, (err, target) => {
+app.get('/campgrounds/:id', (req, res) => {
+  Campground.findById(req.params.id, (err, target) => {
     if (err) console.log('something went wrong');
-    else res.render('campground_info', { camp_info: target });
-  }
-    
-   );
+    else res.render('show', {camp:target});
+   });
   
   
+
 });
+  
+  
+
 
 
 
