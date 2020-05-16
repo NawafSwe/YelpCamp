@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 
 /*---------------------------- setting up the app ----------------------------*/
@@ -13,9 +14,20 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+/*---------------------------- setting up  the connection of the data base ----------------------------*/
+const uri ='mongodb://localhost/yelpcamp';
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}, (err,db) => {
+    if (err)
+      console.log('the error is', err);
+    else
+      console.log('successfully connected');
+});
 
 /*---------------------------- testing the connection of the server ----------------------------*/
-const port = 3000;
+const port = 5600;
 app.listen(port, () => {
   console.log(`server is running on ${port}`);
 });
@@ -39,25 +51,33 @@ app.get('/', (req, res) => {
     we will take the data from the data base later on ;; 
 
 */
-let camp_grounds_list = [
-  {
-    name: 'ksa',
-    image_url:
-      'https://koa.com/blog/images/make-tent-camping-more-comfortable.jpg?preset=blogPhoto'
-  },
-  {
-    name: 'ksa',
-    image_url:
-      'https://koa.com/blog/images/make-tent-camping-more-comfortable.jpg?preset=blogPhoto'
-  },
-  {
-    name: 'ksa',
-    image_url:
-      'https://koa.com/blog/images/make-tent-camping-more-comfortable.jpg?preset=blogPhoto'
+
+/*---------------------------- now creating our models and schema ---------------------------- */
+let campgroundSchema = new mongoose.Schema({
+  name: String,
+  image_url: String
+});
+let Campground = mongoose.model('campground', campgroundSchema);
+/*Campground.create({
+  name: 'ksa',
+  image_url:
+    'https://koa.com/blog/images/make-tent-camping-more-comfortable.jpg?preset=blogPhoto'
+}
+  , (err, campground) => { 
+    if (err)
+      console.log('not added');
+    else
+      console.log('successfully added');
   }
-]; 
+);*/
+
 app.get('/campgrounds', (req, res) => { 
-  res.render('campgrounds', { camp_grounds_list: camp_grounds_list });
+  Campground.find({}, (err,camps) => {
+    if (err) console.log('error', err);
+    else res.render('campgrounds', { camp_grounds_list: camps});;
+  });
+
+  
 });
 
 
