@@ -4,8 +4,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const Campground = require('./models/Campground');
+const db_connection = require('./db_connection');
 
 
 /*---------------------------- setting up the app ----------------------------*/
@@ -15,17 +15,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-/*---------------------------- setting up  the connection of the data base ----------------------------*/
-const uri ='mongodb://localhost/yelpcamp';
-mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}, (err,db) => {
-    if (err)
-      console.log('the error is', err);
-    else
-      console.log('successfully connected');
-});
+
 
 /*---------------------------- testing the connection of the server ----------------------------*/
 const port = 3000;
