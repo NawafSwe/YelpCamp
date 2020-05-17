@@ -1,12 +1,12 @@
 
 /*---------------------------- importing the packages ----------------------------*/
-const express       = require('express'),
-      app           = express(),
-      bodyParser    = require('body-parser'),
-      cors          = require('cors'),
-     Campground     = require('./models/Campground'),
-     seed_db        = require('./seed_db'), 
-     db_connection = require('./db_connection');
+const express   = require('express'),
+  app           = express(),
+  bodyParser    = require('body-parser'),
+  cors          = require('cors'),
+  Campground    = require('./models/Campground'),
+  seed_db       = require('./configuration/seed_db'),
+  db_connection = require('./configuration/db_connection');
 
 
 /*---------------------------- Calling the seedDB function ----------------------------*/
