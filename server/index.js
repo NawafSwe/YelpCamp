@@ -5,6 +5,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const Campground = require('./models/Campground');
 
 
 /*---------------------------- setting up the app ----------------------------*/
@@ -27,19 +28,13 @@ mongoose.connect(uri, {
 });
 
 /*---------------------------- testing the connection of the server ----------------------------*/
-const port = 5700;
+const port = 3000;
 app.listen(port, () => {
   console.log(`server is running on ${port}`);
 });
 
 
-/*---------------------------- now creating our models and schema ---------------------------- */
-let campgroundSchema = new mongoose.Schema({
-  name: String,
-  image_url: String,
-  description: String 
-});
-let Campground = mongoose.model('campground', campgroundSchema);
+
 
 
 /*---------------------------- app routes ---------------------------- */
