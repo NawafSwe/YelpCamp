@@ -1,11 +1,11 @@
 
 /*---------------------------- importing the packages ----------------------------*/
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const Campground = require('./models/Campground');
-const db_connection = require('./db_connection');
+const express = require('express'),
+      app = express(),
+      bodyParser = require('body-parser'),
+      cors = require('cors'),
+      Campground = require('./models/Campground'),
+      db_connection = require('./db_connection');
 
 
 /*---------------------------- setting up the app ----------------------------*/
@@ -32,8 +32,10 @@ app.listen(port, () => {
 
 app.get('/campgrounds', (req, res) => {
   Campground.find({}, (err, camps) => {
-    if (err) console.log('error', err);
-    else res.render('index', { camp_grounds_list: camps });
+    if (err)
+      console.log('error', err);
+    else
+      res.render('index', { camp_grounds_list: camps });
   });
 });
 
@@ -55,16 +57,17 @@ app.post('/campgrounds', (req, res) => {
   const name = req.body.name;
   const image_url = req.body.image_url;
   const description = req.body.description;
-  const new_camp_ground =  {
-      name: name,
-      image_url: image_url,
-      description: description
-    }
+
+  const new_camp_ground = create_campground(name, image_url, description);
   Campground.create(new_camp_ground, (err, campground) => {
-    if (err) console.log('not added');
-    else console.log('successfully added', campground);
+    if (err)
+      console.log('not added');
+    else {
+      console.log('successfully added', campground);
+      res.redirect('campgrounds');
+    }
   });
-  res.redirect('campgrounds');
+  
  });
 
 
@@ -81,8 +84,10 @@ where it shows more info about a particular campground
 
 app.get('/campgrounds/:id', (req, res) => {
   Campground.findById(req.params.id, (err, target) => {
-    if (err) console.log('something went wrong');
-    else res.render('show', {camp:target});
+    if (err)
+      console.log('something went wrong');
+    else
+      res.render('show', { camp: target });
    });
   
   
@@ -96,7 +101,7 @@ app.get('/campgrounds/:id', (req, res) => {
 
 /* ---------------------------- helper functions ----------------------------*/
 // this function is for creating an object of campground.
-const create_campground = (campName, url,description) => {
+function create_campground(campName, url,description){
   return {
     name: campName,
     image_url: url,
