@@ -1,5 +1,6 @@
 
 
+
 /*---------------------------- importing the packages ----------------------------*/
 const express   = require('express'),
       app           = express(),
@@ -52,20 +53,16 @@ app.get('/campgrounds', (req, res) => {
   */
 
 app.post('/campgrounds', (req, res) => {
-  const name = req.body.name;
-  const image_url = req.body.image_url;
-  const description = req.body.description;
-
-  const new_camp_ground = create_campground(name, image_url, description);
-  Campground.create(new_camp_ground, (err, campground) => {
-    if (err)
-      console.log('not added');
-    else {
-      console.log('successfully added', campground);
-      res.redirect('campgrounds');
+ 
+  Campground.create(req.body.campground, (err, target) => {
+    if (err) {
+      console.log('err', err);
+      
+    } else {
+      console.log('added\n', target);
+      res.redirect('/campgrounds');
     }
-  });
-  
+   })
  });
 
 
@@ -91,19 +88,55 @@ app.get('/campgrounds/:id', (req, res) => {
    });
   
 });
-  
-  
 
+/* this route is nested route because the each campground has relation with comments -- RestFul routes*/
+app.get('/campgrounds/:id/comments/new', (req, res) => {
+  res.render('newComment');
+});
 
+/* this route is nested route because the each campground has relation with comments -- RestFul routes where it 
+    adds a comment 
+*/
+app.post('/campgrounds/:id/comments', (req, res) => {
+  const comment = req.body.comment;
+  Campground.findOne(req.params.id, (err, campground) => { 
+    if (err) {
+      console.log('err', err);
+    } else { 
+      Comment.create(comment, (err, comment) => { 
+        if (err) {
+          console.log('err', err);
+        } else {
+          campground.comments.push(comment);
+          campground.save((err, status) => { 
+            if (err) {
+              console.log('err', err);
+            } else { 
+              console.log('comment was added:',status);
+            }
+          });
+        }
+      });
+    }
+  });
 
-
+});
+ 
 /* ---------------------------- helper functions ----------------------------*/
-// this function is for creating an object of campground.
+/*  this function is for creating an object of campground.
+    this is en easier way to avoid writing nested callback functions inside the routes
+*/
 function create_campground(campName, url,description){
-  return {
-    name: campName,
-    image_url: url,
-    description: description
-  }
+ return {
+   name: campName,
+   image_url: url,
+   description: description
+ }
+  
 }
+
+
+// this function is helps to create and add a comment to a particular campground
+function add_comment(camp, comment) {}
+
 
