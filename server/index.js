@@ -1,15 +1,12 @@
-
-
-
 /*---------------------------- importing the packages ----------------------------*/
-const express   = require('express'),
-      app           = express(),
-      bodyParser    = require('body-parser'),
-      cors          = require('cors'),
-      Campground    = require('./models/Campground'),
-      seedDB          = require('./seeds'),
-      Comment = require('./models/Comment'),
-      db_connection = require('./configuration/db_connection');
+const   express         = require('express'),
+        app             = express(),
+        bodyParser      = require('body-parser'),
+        cors            = require('cors'),
+        Campground      = require('./models/Campground'),
+        seedDB          = require('./seeds'),
+        Comment         = require('./models/Comment'),
+        db_connection   = require('./configuration/db_connection');
 
 
 /*---------------------------- Calling the seedDB function ----------------------------*/
@@ -116,11 +113,10 @@ app.post('/campgrounds/:id/comments', (req, res) => {
         } else {
           console.log(comment);
           campground.comments.push(comment);
-          campground.save((err, status) => {
+          campground.save((err, comment) => {
             if (err) {
               console.log('err', err);
             } else {
-              console.log('comment was added:', status.comments);
               res.redirect('/campgrounds/' + req.params.id);
             }
           });
