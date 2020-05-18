@@ -20,7 +20,7 @@ let data = [
     }
 ]
  
-function seedDB(){
+ function seedDB(){
    /* first we removes all the campgrounds from the database */
    Campground.remove({}, function(err){
        if (err) {
@@ -62,5 +62,5 @@ function seedDB(){
     }); 
     //add a few comments
 }
- 
 module.exports = seedDB;
+

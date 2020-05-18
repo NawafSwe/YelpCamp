@@ -1,12 +1,13 @@
 
+
 /*---------------------------- importing the packages ----------------------------*/
 const express   = require('express'),
-  app           = express(),
-  bodyParser    = require('body-parser'),
-  cors          = require('cors'),
-  Campground    = require('./models/Campground'),
-  seed_db       = require('./configuration/seed_db'),
-  db_connection = require('./configuration/db_connection');
+      app           = express(),
+      bodyParser    = require('body-parser'),
+      cors          = require('cors'),
+      Campground    = require('./models/Campground'),
+      seedDB          = require('./seeds'),
+      db_connection = require('./configuration/db_connection');
 
 
 /*---------------------------- Calling the seedDB function ----------------------------*/
@@ -29,7 +30,12 @@ app.listen(port, () => {
 
 /*---------------------------- app routes ---------------------------- */
 
-
+/* this route is the '/' is the initial route where render the home page*/
+app.get('/', (req, res) => {
+    res.render('home');
+});
+ 
+/*  this route is the INDEX ROUTE  -- '/campgrounds' where it renders the campgrounds from the database */
 app.get('/campgrounds', (req, res) => {
   Campground.find({}, (err, camps) => {
     if (err)
@@ -38,14 +44,6 @@ app.get('/campgrounds', (req, res) => {
       res.render('index', { camp_grounds_list: camps });
   });
 });
-
-
-/* this route is the INDEX ROUTE  --  '/' is the initial route where render the home page*/
-app.get('/', (req, res) => {
-    res.render('home');
-});
- 
-
 
 
 
@@ -90,8 +88,6 @@ app.get('/campgrounds/:id', (req, res) => {
       res.render('show', { camp: target });
    });
   
-  
-
 });
   
   
