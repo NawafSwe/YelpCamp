@@ -105,21 +105,23 @@ app.get('/campgrounds/:id/comments/new', (req, res) => {
     adds a comment 
 */
 app.post('/campgrounds/:id/comments', (req, res) => {
-  const comment = req.body.comment;
+  
   Campground.findById(req.params.id, (err, campground) => {
     if (err) {
       console.log('err', err);
     } else {
-      Comment.create(comment, (err, comment) => {
+      Comment.create(req.body.comment, (err, comment) => {
         if (err) {
           console.log('err', err);
         } else {
+          console.log(comment);
           campground.comments.push(comment);
           campground.save((err, status) => {
             if (err) {
               console.log('err', err);
             } else {
-              console.log('comment was added:', status);
+              console.log('comment was added:', status.comments);
+              res.redirect('/campgrounds/' + req.params.id);
             }
           });
         }
@@ -130,20 +132,10 @@ app.post('/campgrounds/:id/comments', (req, res) => {
 });
  
 /* ---------------------------- helper functions ----------------------------*/
-/*  this function is for creating an object of campground.
-    this is en easier way to avoid writing nested callback functions inside the routes
-*/
-function create_campground(campName, url,description){
- return {
-   name: campName,
-   image_url: url,
-   description: description
- }
-  
-}
 
 
-// this function is helps to create and add a comment to a particular campground
-function add_comment(camp, comment) {}
+
+
+
 
 
