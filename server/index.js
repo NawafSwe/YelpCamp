@@ -8,6 +8,7 @@ const express   = require('express'),
       cors          = require('cors'),
       Campground    = require('./models/Campground'),
       seedDB          = require('./seeds'),
+      Comment = require('./models/Comment'),
       db_connection = require('./configuration/db_connection');
 
 
@@ -42,7 +43,7 @@ app.get('/campgrounds', (req, res) => {
     if (err)
       console.log('error', err);
     else
-      res.render('index', { camp_grounds_list: camps });
+      res.render('campgrounds/index', { camp_grounds_list: camps });
   });
 });
 
@@ -53,7 +54,6 @@ app.get('/campgrounds', (req, res) => {
   */
 
 app.post('/campgrounds', (req, res) => {
- 
   Campground.create(req.body.campground, (err, target) => {
     if (err) {
       console.log('err', err);
@@ -69,7 +69,7 @@ app.post('/campgrounds', (req, res) => {
  /* this route is the NEW ROUTE -- '/campgrounds/new' is to get the form using the convention of RESTApi naming      */
 /* a function to generate an object of campground*/
 app.get('/campgrounds/new', (req, res) => { 
-  res.render('new');
+  res.render('campgrounds/new');
 });
 
 
@@ -84,14 +84,21 @@ app.get('/campgrounds/:id', (req, res) => {
     if (err)
       console.log('something went wrong');
     else
-      res.render('show', { camp: target });
+      res.render('campgrounds/show', { camp: target });
    });
   
 });
 
 /* this route is nested route because the each campground has relation with comments -- RestFul routes*/
 app.get('/campgrounds/:id/comments/new', (req, res) => {
-  res.render('newComment');
+  Campground.findById(req.params.id, (err, camp) => { 
+    if (err) {
+      console.log('err', err);
+    } else { 
+      res.render('comments/new',{camp:camp});
+    }
+  });
+  
 });
 
 /* this route is nested route because the each campground has relation with comments -- RestFul routes where it 
@@ -99,20 +106,20 @@ app.get('/campgrounds/:id/comments/new', (req, res) => {
 */
 app.post('/campgrounds/:id/comments', (req, res) => {
   const comment = req.body.comment;
-  Campground.findOne(req.params.id, (err, campground) => { 
+  Campground.findById(req.params.id, (err, campground) => {
     if (err) {
       console.log('err', err);
-    } else { 
-      Comment.create(comment, (err, comment) => { 
+    } else {
+      Comment.create(comment, (err, comment) => {
         if (err) {
           console.log('err', err);
         } else {
           campground.comments.push(comment);
-          campground.save((err, status) => { 
+          campground.save((err, status) => {
             if (err) {
               console.log('err', err);
-            } else { 
-              console.log('comment was added:',status);
+            } else {
+              console.log('comment was added:', status);
             }
           });
         }
