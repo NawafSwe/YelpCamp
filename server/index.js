@@ -81,7 +81,9 @@ where it shows more info about a particular campground
 */
 
 app.get('/campgrounds/:id', (req, res) => {
-  Campground.findById(req.params.id, (err, target) => {
+  /* this is be cause we have an relation between campgrounds and comment 
+  so we want all comment for a particular campground */
+  Campground.findById(req.params.id).populate('comments').exec((err, target) => {
     if (err)
       console.log('something went wrong');
     else
