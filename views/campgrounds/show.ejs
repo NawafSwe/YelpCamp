@@ -1,13 +1,57 @@
 <%- include ('../partials/header') %>
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">YelpCamp</p>
+            <div class="list-group">
+                <li class="list-group-item">info3</li>
+                <li class="list-group-item active">info2</li>
+                 <li class="list-group-item">inf3</li>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="thumbnail">
+                <img class="image-responsive" src="<%=camp.image_url%>" alt="">
+                <div class="caption-full">
+                    <h4 class="pull-right">39.00$/night</h4>
+                    <h4><a href="#"><%=camp.name%></a></h4>
+                     <p><%=camp.description%></p>
+                </div>
+                <div class="well">
+                    <div class="text-right">
+                         <a class="btn btn-success" href="/campgrounds/<%=camp._id%>/comments/new">Leave A Review!</a>
+                    </div>
+                    <hr>
+                
+                 <% camp.comments.forEach((comment)=>{%>
+                    <div class="row">
+                     <div class="col-md-12">
+                         <strong><%=comment.author%></strong>
+                         <span class="pull-right">10 days ago</span>
+                         <p>
+                         <%=comment.text%>
+                         </p>
+                     </div>
+                    </div>
 
-<h1><%=camp.name%></h1>
-<img src="<%=camp.image_url%>" alt="">
-<p><%=camp.description%></p>
-<p><a class="btn btn-success" href="/campgrounds/<%=camp._id%>/comments/new">Add new comment</a></p>
+                <%})%>
 
-<% camp.comments.forEach((comment)=>{%>
-    <p>
-        <strong><%=comment.author%></strong>-<%=comment.text%>
-     </p>
-<%})%>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+          
+        
+       
+       
+
+      
+
+</div>
+
 <%- include ('../partials/footer') %>
