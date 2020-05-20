@@ -1,3 +1,4 @@
+/*---------------------------- importing the packages ----------------------------*/
 const mongoose = require('mongoose');
 
 /*---------------------------- creating Schema----------------------------*/
@@ -14,6 +15,6 @@ const campgroundSchema = new mongoose.Schema({
 });
 const Campground = mongoose.model('Campground', campgroundSchema);
 
-
+/*----------------------------Exporting the model ----------------------------*/
 module.exports = Campground;
 
