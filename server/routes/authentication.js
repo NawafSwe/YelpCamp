@@ -1,6 +1,8 @@
 /* ----------------------------  importing packages ---------------------------- */
 const  express = require('express'),
-       router = express.Router();
+       router = express.Router(),
+       User = require('../models/User'),
+       passport  = require('passport');
        
 /* router is used to route express into index.js file */
 

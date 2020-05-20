@@ -7,7 +7,7 @@ const express                   = require('express'),
   seedDB                        = require('./seeds'),
   Comment                       = require('./models/Comment'),
   User                          = require('./models/User'),
-  db_connection                 = require('./db_connection'),
+  db_connection                 = require('./configuration/db_connection'),
   passport                      = require('passport'),
   localStrategy                 = require('passport-local'),
   passportLocalMongoose         = require('passport-local-mongoose'),
@@ -15,14 +15,8 @@ const express                   = require('express'),
   campgrounds_routes            = require('./routes/campgrounds'),
   comments_route                = require('./routes/comments');
             
-
-
-        
-
 /*---------------------------- Calling the seedDB function ----------------------------*/
 seedDB();
-
-
     
 /*---------------------------- setting up the app ----------------------------*/
 app.use(express.static("public"));
@@ -30,6 +24,9 @@ app.use(cors());
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(authentication_routes);
+app.use(campgrounds_routes);
+app.use(comments_route);
 
 /*---------------------------- Middleware ----------------------------*/
 

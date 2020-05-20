@@ -1,6 +1,8 @@
 /* ----------------------------  importing packages ---------------------------- */
-const  express = require('express'),
-       router = express.Router();
+const express = require('express'),
+  Comment = require('../models/Comment'),
+  Campground = require('../models/Campground'),
+  router = express.Router();
        
 /* router is used to route express into index.js file */
 
@@ -44,5 +46,18 @@ router.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
     }
   });
 });
+
+
+/* isLoggedIn function is considered to be a middleware that we need in the secret route where we need to check
+if the user is logged in or not */
+function isLoggedIn(req, res, next) { 
+    if (req.isAuthenticated()) { 
+        // return next() means go next where it is the callback function in the route
+        return next();
+    } 
+      res.redirect('/login');
+    
+    
+}
 
 module.exports = router;
