@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Campground = require("./models/Campground");
-const Comment   = require("./models/Comment");
+const Comment = require("./models/Comment");
+const User = require('./models/User');
  
 let data = [
   {
@@ -31,8 +32,12 @@ function seedDB() {
      if (err) {
        console.log(err);
      }
-
      console.log('removed campgrounds!');
+
+    User.deleteMany({}, (err) => {
+        if (err) {
+        console.log(err);
+          }});
      /* second we removes all the comments from the database */
      Comment.deleteMany({}, function (err) {
        if (err) {

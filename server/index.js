@@ -1,21 +1,14 @@
 /*---------------------------- importing the packages ----------------------------*/
-const app = require('./configuration/app_config'),
-    Campground = require('./models/Campground'),
-    seedDB = require('./seeds'),
-    Comment = require('./models/Comment'),
-    User = require('./models/User'),
-    passport = require('passport'),
-    localStrategy = require('passport-local'),
-    passportLocalMongoose = require('passport-local-mongoose');
+const       app           = require('./configuration/app_config'),
+            Campground    = require('./models/Campground'),
+            seedDB        = require('./seeds'),
+            Comment       = require('./models/Comment'),
+            User          = require('./models/User'),
+            passport      = require('passport');
         
 
-
 /*---------------------------- Calling the seedDB function ----------------------------*/
-     seedDB();
-
-
-
-
+  seedDB();
 
 /*---------------------------- testing the connection of the server ----------------------------*/
 const port = 3000;
@@ -33,12 +26,10 @@ app.get('/', (req, res) => {
 });
  
 /*  this route is the INDEX ROUTE  -- '/campgrounds' where it renders the campgrounds from the database */
-app.get('/campgrounds', (req, res) => {
+app.get('/campgrounds', isLoggedIn, (req, res) => {
   Campground.find({}, (err, camps) => {
-    if (err)
-      console.log('error', err);
-    else
-      res.render('campgrounds/index', { camp_grounds_list: camps });
+    if (err) console.log('error', err);
+    else res.render('campgrounds/index', { camp_grounds_list: camps });
   });
 });
 
@@ -48,7 +39,7 @@ app.get('/campgrounds', (req, res) => {
     by taking the data from a form
   */
 
-app.post('/campgrounds', (req, res) => {
+app.post('/campgrounds',(req, res) => {
   Campground.create(req.body.campground, (err, target) => {
     if (err) {
       console.log('err', err);
@@ -63,7 +54,7 @@ app.post('/campgrounds', (req, res) => {
 
  /* this route is the NEW ROUTE -- '/campgrounds/new' is to get the form using the convention of RESTApi naming      */
 /* a function to generate an object of campground*/
-app.get('/campgrounds/new', (req, res) => { 
+app.get('/campgrounds/new', isLoggedIn,(req, res) => { 
   res.render('campgrounds/new');
 });
 
@@ -72,7 +63,7 @@ app.get('/campgrounds/new', (req, res) => {
 where it shows more info about a particular campground
 */
 
-app.get('/campgrounds/:id', (req, res) => {
+app.get('/campgrounds/:id', isLoggedIn,(req, res) => {
   /* this is be cause we have an relation between campgrounds and comment 
   so we want all comment for a particular campground */
   Campground.findById(req.params.id).populate('comments').exec((err, target) => {
@@ -85,7 +76,7 @@ app.get('/campgrounds/:id', (req, res) => {
 });
 
 /* this route is nested route because the each campground has relation with comments -- RestFul routes*/
-app.get('/campgrounds/:id/comments/new', (req, res) => {
+app.get('/campgrounds/:id/comments/new', isLoggedIn,(req, res) => {
   Campground.findById(req.params.id, (err, camp) => { 
     if (err) {
       console.log('err', err);
@@ -158,7 +149,14 @@ app.get('/login', (req, res) => {
 app.post('/login', passport.authenticate('local',{
   successRedirect: '/campgrounds',
   failureRedirect:'/login'
-}),(req, res) => {});
+}), (req, res) => { });
+
+
+/* Logout routes */
+app.get('/logout', (req, res) => { 
+  req.logout();
+  res.redirect('/');
+});
  
 /* ---------------------------- helper functions ----------------------------*/
 
@@ -168,9 +166,9 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) { 
         // return next() means go next where it is the callback function in the route
         return next();
-    } else {
+    } 
       res.redirect('/login');
-    }
+    
     
 }
 
