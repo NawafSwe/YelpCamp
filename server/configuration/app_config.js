@@ -42,3 +42,5 @@ passport.use(new localStrategy(User.authenticate()));
 from session decoded and encoded */
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+module.exports = app;

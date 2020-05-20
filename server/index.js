@@ -153,6 +153,28 @@ app.post('/campgrounds/:id/comments', (req, res) => {
   });
 
 });
+
+/* ---------------------------- Register routes ----------------------------  */
+
+/* this route '/register' is for showing the form of the register to create new account*/
+app.get('/register', (req, res) => { 
+  res.render('register');
+});
+
+/* this route is post request where it post a user data to create a username in the db */
+app.post('/register', (req, res) => { 
+  User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
+    if (err) {
+      console.log(err);
+      res.render('register');
+    }
+    console.log(user);
+  
+    // here we will redirect the user or render the user to page
+    res.send('Createdddddd');
+  });
+
+});
  
 /* ---------------------------- helper functions ----------------------------*/
 
