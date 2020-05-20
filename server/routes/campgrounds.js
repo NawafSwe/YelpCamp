@@ -21,12 +21,15 @@ router.get('/campgrounds', (req, res) => {
     by taking the data from a form
   */
 
-router.post('/campgrounds', (req, res) => {
+router.post('/campgrounds',isLoggedIn, (req, res) => {
   Campground.create(req.body.campground, (err, target) => {
     if (err) {
       console.log('err', err);
     } else {
-      console.log('added\n', target);
+      target.user.id = req.user._id;
+      target.user.username = req.user.username;
+      target.save();
+      console.log(target);
       res.redirect('/campgrounds');
     }
   });
