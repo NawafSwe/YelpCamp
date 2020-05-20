@@ -3,18 +3,15 @@ const express = require('express'),
   app = express(),
   bodyParser = require('body-parser'),
   cors = require('cors'),
-  Campground = require('./models/Campground'),
-  seedDB = require('./seeds'),
-  Comment = require('./models/Comment'),
-  User = require('./models/User'),
-  db_connection = require('./configuration/db_connection'),
+  User = require('../models/User'),
+  db_connection = require('./db_connection'),
   passport = require('passport'),
   localStrategy = require('passport-local'),
   passportLocalMongoose = require('passport-local-mongoose');
 
   
-/*---------------------------- Calling the seedDB function ----------------------------*/
-     seedDB();
+
+    
 /*---------------------------- setting up the app ----------------------------*/
 app.use(express.static("public"));
 app.use(cors());

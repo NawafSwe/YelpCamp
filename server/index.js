@@ -1,48 +1,19 @@
 /*---------------------------- importing the packages ----------------------------*/
-const express = require('express'),
-  app = express(),
-  bodyParser = require('body-parser'),
-  cors = require('cors'),
-  Campground = require('./models/Campground'),
-  seedDB = require('./seeds'),
-  Comment = require('./models/Comment'),
-  User = require('./models/User'),
-  db_connection = require('./configuration/db_connection'),
-  passport = require('passport'),
-  localStrategy = require('passport-local'),
-  passportLocalMongoose = require('passport-local-mongoose');
+const app = require('./configuration/app_config'),
+    Campground = require('./models/Campground'),
+    seedDB = require('./seeds'),
+    Comment = require('./models/Comment'),
+    User = require('./models/User'),
+    passport = require('passport'),
+    localStrategy = require('passport-local'),
+    passportLocalMongoose = require('passport-local-mongoose');
         
 
 
 /*---------------------------- Calling the seedDB function ----------------------------*/
      seedDB();
-/*---------------------------- setting up the app ----------------------------*/
-app.use(express.static("public"));
-app.use(cors());
-app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
-/*---------------------------- setting authentication options ----------------------------*/
-/* 
-secret is used to encode and decode and can be anything
-*/
-app.use(
-  require('express-session')({
-    secret: 'nawaf_ksa',
-    resave: false,
-    saveUninitialized: false
-  })
-);
 
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new localStrategy(User.authenticate()));
-
-/* passport serialize and deserialize are response of reading the data 
-from session decoded and encoded */
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 
 
@@ -165,16 +136,29 @@ app.get('/register', (req, res) => {
 app.post('/register', (req, res) => { 
   User.register(new User({ username: req.body.username }), req.body.password, (err, user) => {
     if (err) {
-      console.log(err);
+      console.log('user already exist',err);
       res.render('register');
+    } else {
+      console.log(user);
+      passport.authenticate('local')(req, res, () => {
+        res.redirect('/campgrounds');
+      });
+      
     }
-    console.log(user);
-  
-    // here we will redirect the user or render the user to page
-    res.send('Createdddddd');
   });
-
 });
+
+/* Login routes GET:show form of log in 
+  POST: posting the login from username and password 
+ */
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+app.post('/login', passport.authenticate('local',{
+  successRedirect: '/campgrounds',
+  failureRedirect:'/login'
+}),(req, res) => {});
  
 /* ---------------------------- helper functions ----------------------------*/
 
@@ -184,8 +168,10 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) { 
         // return next() means go next where it is the callback function in the route
         return next();
+    } else {
+      res.redirect('/login');
     }
-    res.redirect('/login');
+    
 }
 
 
