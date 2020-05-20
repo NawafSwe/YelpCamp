@@ -33,14 +33,13 @@ router.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
           console.log('err', err);
         } else {
           console.log(comment);
+          //before adding the comment to a campground we want to assign a user to a comment
+          comment.author.id = req.user._id;
+          comment.author.username = req.user.username;
+          comment.save();
           campground.comments.push(comment);
-          campground.save((err, comment) => {
-            if (err) {
-              console.log('err', err);
-            } else {
-              res.redirect('/campgrounds/' + req.params.id);
-            }
-          });
+          campground.save();
+          res.redirect('/Campgrounds/'+ req.params.id);
         }
       });
     }
@@ -59,5 +58,7 @@ function isLoggedIn(req, res, next) {
     
     
 }
+/* ---------------------- helper functions ------------- */
+
 
 module.exports = router;

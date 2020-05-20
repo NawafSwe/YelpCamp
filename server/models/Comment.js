@@ -4,7 +4,13 @@ const mongoose = require('mongoose');
 
 /*---------------------------- creating Schema----------------------------*/
 const commentSchema = mongoose.Schema({
-  author: String,
+  author: {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'User'
+    },
+    username:String
+  },
   text: String
 });
 const Comment = mongoose.model('Comment', commentSchema);

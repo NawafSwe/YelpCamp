@@ -19,7 +19,7 @@ const express = require('express'),
   
             
 /*---------------------------- Calling the seedDB function ----------------------------*/
-seedDB();
+//seedDB();
     
 /*---------------------------- setting up the app ----------------------------*/
 app.use(express.static("public"));

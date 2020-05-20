@@ -27,50 +27,9 @@ let data = [
 ];
  
 function seedDB() {
-   /* first we removes all the campgrounds from the database */
+   // first we removes all the campgrounds from the database */
    Campground.deleteMany({}, function (err) {
-     if (err) {
-       console.log(err);
-     }
-     console.log('removed campgrounds!');
-
-    User.deleteMany({}, (err) => {
-        if (err) {
-        console.log(err);
-          }});
-     /* second we removes all the comments from the database */
-     Comment.deleteMany({}, function (err) {
-       if (err) {
-         console.log(err);
-       }
-       console.log('removed comments!');
-       //then we start to add a few campgrounds
-       data.forEach(function (seed) {
-         Campground.create(seed, function (err, campground) {
-           if (err) {
-             console.log(err);
-           } else {
-             console.log('added a campground');
-             //then we start to create a comment
-             Comment.create(
-               {
-                 text: 'This place is great, but I wish there was internet',
-                 author: 'Homer'
-               },
-               function (err, comment) {
-                 if (err) {
-                   console.log(err);
-                 } else {
-                   campground.comments.push(comment);
-                   campground.save();
-                   console.log('Created new comment');
-                 }
-               }
-             );
-           }
-         });
-       });
-     });
+     
    }); 
     //add a few comments
 }
