@@ -1,19 +1,22 @@
 /*---------------------------- importing the packages ----------------------------*/
-const express                   = require('express'),
-  app                           = express(),
-  bodyParser                    = require('body-parser'),
-  cors                          = require('cors'),
-  Campground                    = require('./models/Campground'),
-  seedDB                        = require('./seeds'),
-  Comment                       = require('./models/Comment'),
-  User                          = require('./models/User'),
-  db_connection                 = require('./configuration/db_connection'),
-  passport                      = require('passport'),
-  localStrategy                 = require('passport-local'),
-  passportLocalMongoose         = require('passport-local-mongoose'),
-  authentication_routes         = require('./routes/authentication'),
-  campgrounds_routes            = require('./routes/campgrounds'),
-  comments_route                = require('./routes/comments');
+const express = require('express'),
+  app = express(),
+  bodyParser = require('body-parser'),
+  cors = require('cors'),
+  Campground = require('./models/Campground'),
+  seedDB = require('./seeds'),
+  Comment = require('./models/Comment'),
+  User = require('./models/User'),
+  db_connection = require('./configuration/db_connection'),
+  passport = require('passport'),
+  localStrategy = require('passport-local'),
+  passportLocalMongoose = require('passport-local-mongoose');
+
+/*---------------------------- importing the routers ----------------------------*/
+  const authentication_routes  = require('./routes/authentication'),
+  campgrounds_routes           = require('./routes/campgrounds'),
+  comments_route               = require('./routes/comments');
+  
             
 /*---------------------------- Calling the seedDB function ----------------------------*/
 seedDB();
