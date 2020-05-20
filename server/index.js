@@ -26,15 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
-/*---------------------------- Middleware ----------------------------*/
 
-/* this is a middleware var user is to gives you if there is a user singed in or not  
-and it gives you the id of him and the username and it will be passed to all the routes in the templates.*/
-app.use((req, res, next) => {
-  res.locals.user = req.user;
-  //next will movie to the next middleware of the route;
-  next();
-});
 
 /*---------------------------- setting authentication options ----------------------------*/
 /* 
@@ -64,6 +56,15 @@ app.listen(port, () => {
   console.log(__dirname);
 });
 
+/*---------------------------- Middleware ----------------------------*/
+
+/* this is a middleware var user is to gives you if there is a user singed in or not  
+and it gives you the id of him and the username and it will be passed to all the routes in the templates.*/
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  //next will movie to the next middleware of the route;
+  next();
+});
 
 /*---------------------------- app routes ---------------------------- */
 
@@ -72,7 +73,6 @@ app.listen(port, () => {
 app.get('/', (req, res) => {
     res.render('home');
 });
-
 
 
 /* ---------------------------- using routers ---------------------------- */
