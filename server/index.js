@@ -24,9 +24,7 @@ app.use(cors());
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(authentication_routes);
-app.use(campgrounds_routes);
-app.use(comments_route);
+
 
 /*---------------------------- Middleware ----------------------------*/
 
@@ -37,7 +35,6 @@ app.use((req, res, next) => {
   //next will movie to the next middleware of the route;
   next();
 });
-
 
 /*---------------------------- setting authentication options ----------------------------*/
 /* 
@@ -75,6 +72,14 @@ app.listen(port, () => {
 app.get('/', (req, res) => {
     res.render('home');
 });
+
+
+
+/* ---------------------------- using routers ---------------------------- */
+app.use(authentication_routes);
+app.use(campgrounds_routes);
+app.use(comments_route);
+
  
 /* ---------------------------- helper functions ----------------------------*/
 
