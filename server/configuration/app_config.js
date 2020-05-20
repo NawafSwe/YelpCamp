@@ -19,6 +19,8 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+
+
 /*---------------------------- setting authentication options ----------------------------*/
 /* 
 secret is used to encode and decode and can be anything
