@@ -5,7 +5,6 @@ const express = require('express'),
     methodOverride = require('method-override'),
     cors = require('cors'),
     Campground = require('./models/Campground'),
-    seedDB = require('./seeds'),
     Comment = require('./models/Comment'),
     User = require('./models/User'),
     db_connection = require('./configuration/db_connection'),
@@ -18,9 +17,6 @@ const authentication_routes = require('./routes/authentication'),
     campgrounds_routes = require('./routes/campgrounds'),
     comments_route = require('./routes/comments');
 
-
-/*---------------------------- Calling the seedDB function ----------------------------*/
-//seedDB();
 
 /*---------------------------- setting up the app ----------------------------*/
 app.use(express.static("public"));
