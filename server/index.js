@@ -2,6 +2,7 @@
 const express = require('express'),
   app = express(),
   bodyParser = require('body-parser'),
+  methodOverride = require('method-override'),
   cors = require('cors'),
   Campground = require('./models/Campground'),
   seedDB = require('./seeds'),
@@ -27,9 +28,7 @@ app.use(cors());
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-
-
+app.use(methodOverride('_method'));
 
 /*---------------------------- setting authentication options ----------------------------*/
 /* 
@@ -48,7 +47,7 @@ app.use(passport.session());
 passport.use(new localStrategy(User.authenticate()));
 
 /* passport serialize and deserialize are response of reading the data 
-from session decoded and encoded */
+from session decoded and encoded save and delete  */
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 

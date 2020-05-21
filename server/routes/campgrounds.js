@@ -56,6 +56,36 @@ router.get('/campgrounds/:id', (req, res) => {
     });
 });
 
+
+/* this route is to show the from of updating info about a particular camp */
+router.get('/campgrounds/:id/edit', (req, res) => { 
+  Campground.findById(req.params.id, (err, camp) => { 
+    if (err) {
+      console.log(err);
+      res.redirect('/campgrounds/' + req.params.id);
+    } else { 
+      res.render('campgrounds/edit', { campground: camp });
+    }
+  });
+});
+
+/* this route is to update a particular campground */
+
+router.put('/campgrounds/:id', (req, res) => { 
+  Campground.findByIdAndUpdate(req.params.id,req.body.campground, (err, campground) => { 
+    if (err) { 
+      console.log(err);
+    } else {
+      console.log(campground);
+      res.redirect('/campgrounds/' + req.params.id);
+    }
+  });
+});
+
+
+/* this route is DESTROY route -- Restful where you can delete a particular campground */
+router.delete('/campgrounds/:id', (req,res) => { });
+
 /* isLoggedIn function is considered to be a middleware that we need in the secret route where we need to check
 if the user is logged in or not */
 function isLoggedIn(req, res, next) { 
