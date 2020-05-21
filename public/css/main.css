@@ -1,15 +1,18 @@
 
-
-.thumbnail img{
+.thumbnail img {
     width: 100%;
-    
+
 }
-.thumbnail{
+
+.thumbnail {
     padding: 0;
 }
-.thumbnail .caption-full{
-    padding:9px;
+
+.thumbnail .caption-full {
+    padding: 9px;
 }
 
-#delete_form{display: inline;}
+#delete_form {
+    display: inline;
+}
 
