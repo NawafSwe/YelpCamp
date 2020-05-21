@@ -18,8 +18,8 @@
                      <p><%=camp.description%></p>
                      <h5>Created by : <strong><%=camp.user.username%></strong></h5>
                      <a class="btn btn-lg btn-warning" href="/campgrounds/<%=camp.id%>/edit">Edit</a>
-                           <form style="display: inline;" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-lg btn-danger">Delete Campground</button>
+                           <form id="delete_form" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-lg btn-danger">Delete</button>
                             </form>
                 </div>
                 <div class="well">

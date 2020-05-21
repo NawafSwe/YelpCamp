@@ -85,9 +85,10 @@ router.put('/campgrounds/:id', (req, res) => {
 
 /* this route is DESTROY route -- Restful where you can delete a particular campground */
 router.delete('/campgrounds/:id', (req, res) => {
-  Campground.findByIdAndDelete(req.params.id, (err, camp) => { 
+  Campground.findByIdAndRemove(req.params.id, (err, camp) => { 
     if (err) {
       console.log(err);
+      res.redirect('/campgrounds');
     } else {
       console.log(camp);
       res.redirect('/campgrounds');
