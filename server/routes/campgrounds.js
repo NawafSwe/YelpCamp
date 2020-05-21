@@ -84,7 +84,16 @@ router.put('/campgrounds/:id', (req, res) => {
 
 
 /* this route is DESTROY route -- Restful where you can delete a particular campground */
-router.delete('/campgrounds/:id', (req,res) => { });
+router.delete('/campgrounds/:id', (req, res) => {
+  Campground.findByIdAndDelete(req.params.id, (err, camp) => { 
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(camp);
+      res.redirect('/campgrounds');
+    }
+  });
+ });
 
 /* isLoggedIn function is considered to be a middleware that we need in the secret route where we need to check
 if the user is logged in or not */
