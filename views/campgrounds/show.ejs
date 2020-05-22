@@ -20,7 +20,7 @@
                      <!-- if user not logged in or not have the authorize to edit or delete camp -> hide edit and delete buttons-->
                      <%if(currentUser && currentUser._id.equals(camp.user.id) ){%>
                      <a class="btn btn-lg btn-warning" href="/campgrounds/<%=camp.id%>/edit">Edit</a>
-                           <form id="delete_form" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
+                           <form class="delete_form" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
                             <button class="btn btn-lg btn-danger">Delete</button>
                             </form>
                            <%}%>
@@ -39,15 +39,14 @@
                          <p>
                          <%=comment.text%>
                          </p>
-
+                         <!-- if auth and logged in  -> do not hide the buttons -->
+                      <%if(currentUser && currentUser._id.equals(comment.author.id) ){%>
                          <a href="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>/edit"
                          class="btn btn-xs btn-warning">Edit</a>
-                         <form class="form_holder" action="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
-                          <button class="btn btn-xs btn-warning">Delete</button>
+                         <form class="delete_form" action="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
+                          <input  type="submit" class="btn btn-xs btn-danger" value="Delete">
                          </form>
-
-
-
+                         <%}%>
                      </div>
                     </div>
 
