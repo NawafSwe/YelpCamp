@@ -86,40 +86,4 @@ router.delete('/campgrounds/:id/comments/:comment_id', middleware.isAuthorized_c
 });
 
 
-/* ----------------------------  MiddleWares && helper functions ---------------------------- */
-
-/** isAuthorized_comments Middleware
- * @param req is the request of the user
- * @param res is the response that will be send
- * @param next next to move to the route callback function
- * this middleware is for checking if the user is have the right authorization to request a
- * put,delete,get operations.
- * **/
-
-function isAuthorized_comments(req, res, next) {
-    //check if the user is logged in or not
-    if (req.isAuthenticated()) {
-        Comment.findById(req.params.comment_id, (err, comment) => {
-            if (err) {
-                console.log('requested from ', req.user.username);
-                console.log('owner is ', comment.author.username);
-                res.redirect('back');
-            } else {
-                if (req.user._id.equals(comment.author.id)) {
-                    console.log('requested from ', req.user.username);
-                    console.log('owner is ', comment.author.username);
-                    return next();
-                } else {
-                    console.log('requested from ', req.user.username);
-                    console.log('owner is ', comment.author.username);
-                    res.redirect('back');
-                }
-            }
-        });
-
-    } else {
-        res.redirect('back');
-    }
-}
-
 module.exports = router;

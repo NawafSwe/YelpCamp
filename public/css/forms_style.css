@@ -6,3 +6,7 @@
 .delete_form {
     display: inline;
 }
+
+.small_anchor {
+    width: 100%;
+}

@@ -107,39 +107,4 @@ router.delete('/campgrounds/:id', middleware.isAuthorized_campgrounds, (req, res
 });
 
 
-/** isAuthorized_campgrounds Middleware
- * @param req is the request of the user
- * @param res is the response that will be send
- * @param next next to move to the route callback function
- * this middleware is for checking if the user is have the right authorization to request a
- * put,delete,get operations.
- * **/
-
-function isAuthorized_campgrounds(req, res, next) {
-    // first we check if the user is logged in else we redirect the user from where he/she came
-    if (req.isAuthenticated()) {
-        Campground.findById(req.params.id, (err, camp) => {
-            if (err) {
-                console.log(err);
-                //res.redirect('back') ---> redirect the user back from where he/she come from.
-                res.redirect('back');
-            } else {
-                //we check if the user who requests to modify the campground he is the author,
-                // if the result of authentication is true then render the from
-                // we used .equals because mongo returns String.
-                if (req.user._id.equals(camp.user.id)) {
-                    console.log('id of creator ' + camp.user.id + ' username is ' + camp.user.username);
-                    console.log('id of requesting ' + req.user.id + ' username is ' + req.user.username);
-                    return next();
-                } else {
-                    console.log('id of creator ' + camp.user.id + ' username is ' + camp.user.username);
-                    console.log('id of requesting ' + req.user.id + ' username is ' + req.user.username);
-                    res.redirect('back');
-                }
-            }
-        });
-    } else
-        res.redirect('back');
-}
-
 module.exports = router;
