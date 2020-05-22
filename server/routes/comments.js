@@ -2,6 +2,7 @@
 const express = require('express'),
     Comment = require('../models/Comment'),
     Campground = require('../models/Campground'),
+    middleware = require('../middleware/index'),
     router = express.Router();
 
 /* router is used to route express into index.js file */
@@ -10,7 +11,7 @@ const express = require('express'),
 /* ----------------------------  Comments routes ---------------------------- */
 
 /* this route is nested route because the each campground has relation with comments -- RestFul routes*/
-router.get('/campgrounds/:id/comments/new', isLoggedIn, (req, res) => {
+router.get('/campgrounds/:id/comments/new', middleware.isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (err, camp) => {
         if (err) {
             console.log('err', err);
@@ -22,7 +23,7 @@ router.get('/campgrounds/:id/comments/new', isLoggedIn, (req, res) => {
 
 /* this route is nested route because the each campground has relation with comments -- RestFul routes where it 
     adds a comment */
-router.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
+router.post('/campgrounds/:id/comments', middleware.isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (err, campground) => {
         if (err) {
             console.log('err', err);
@@ -46,7 +47,7 @@ router.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
 });
 
 /** this route is SHOW restfulRoute where it shows a form to update a comment  **/
-router.get('/campgrounds/:id/comments/:comment_id/edit', isAuthorized, (req, res) => {
+router.get('/campgrounds/:id/comments/:comment_id/edit', middleware.isAuthorized_comments, (req, res) => {
     Comment.findById(req.params.comment_id, (err, foundComment) => {
         if (err) {
             console.log(err);
@@ -58,7 +59,7 @@ router.get('/campgrounds/:id/comments/:comment_id/edit', isAuthorized, (req, res
 });
 
 /* this route is UPDATE restfulRoute where it updates a comment **/
-router.put('/campgrounds/:id/comments/:comment_id', isAuthorized, (req, res) => {
+router.put('/campgrounds/:id/comments/:comment_id', middleware.isAuthorized_comments, (req, res) => {
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, comment) => {
         if (err) {
             res.redirect(`/campgrounds/${req.params.id}`);
@@ -72,7 +73,7 @@ router.put('/campgrounds/:id/comments/:comment_id', isAuthorized, (req, res) => 
 });
 
 /* this route is DESTROY restfulRoute where it deletes a comment */
-router.delete('/campgrounds/:id/comments/:comment_id', isAuthorized, (req, res) => {
+router.delete('/campgrounds/:id/comments/:comment_id', middleware.isAuthorized_comments, (req, res) => {
     Comment.findByIdAndRemove(req.params.comment_id, (err, comment) => {
         if (err) {
             console.log(err);
@@ -87,19 +88,7 @@ router.delete('/campgrounds/:id/comments/:comment_id', isAuthorized, (req, res) 
 
 /* ----------------------------  MiddleWares && helper functions ---------------------------- */
 
-/* isLoggedIn function is considered to be a middleware that we need in the secret route where we need to check
-if the user is logged in or not */
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        // return next() means go next where it is the callback function in the route
-        return next();
-    }
-    res.redirect('/login');
-
-
-}
-
-/** isAuthorized Middleware
+/** isAuthorized_comments Middleware
  * @param req is the request of the user
  * @param res is the response that will be send
  * @param next next to move to the route callback function
@@ -107,7 +96,7 @@ function isLoggedIn(req, res, next) {
  * put,delete,get operations.
  * **/
 
-function isAuthorized(req, res, next) {
+function isAuthorized_comments(req, res, next) {
     //check if the user is logged in or not
     if (req.isAuthenticated()) {
         Comment.findById(req.params.comment_id, (err, comment) => {

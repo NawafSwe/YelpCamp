@@ -2,6 +2,7 @@
 const express = require('express'),
     Comment = require('../models/Comment'),
     Campground = require('../models/Campground'),
+    middleware = require('../middleware/index'),
     router = express.Router();
 
 
@@ -21,7 +22,7 @@ router.get('/campgrounds', (req, res) => {
     by taking the data from a form
   */
 
-router.post('/campgrounds', isLoggedIn, (req, res) => {
+router.post('/campgrounds', middleware.isLoggedIn, (req, res) => {
     Campground.create(req.body.campground, (err, target) => {
         if (err) {
             console.log('err', err);
@@ -37,7 +38,7 @@ router.post('/campgrounds', isLoggedIn, (req, res) => {
 
 /* this route is the NEW ROUTE -- '/campgrounds/new' is to get the form using the convention of RESTApi naming      */
 /* a function to generate an object of campground*/
-router.get('/campgrounds/new', isLoggedIn, (req, res) => {
+router.get('/campgrounds/new', middleware.isLoggedIn, (req, res) => {
     res.render('campgrounds/new');
 });
 
@@ -58,10 +59,10 @@ router.get('/campgrounds/:id', (req, res) => {
 
 
 /** this route is to show the from of updating info about a particular camp
- * Note: we can create a middleware to check auth isAuthorized will run first to check auth if not auth then not allowed to access;;
+ * Note: we can create a middleware to check auth isAuthorized_campgrounds will run first to check auth if not auth then not allowed to access;;
  * **/
 
-router.get('/campgrounds/:id/edit', isAuthorized, (req, res) => {
+router.get('/campgrounds/:id/edit', middleware.isAuthorized_campgrounds, (req, res) => {
     Campground.findById(req.params.id, (err, camp) => {
         if (err) {
             console.log(err);
@@ -77,7 +78,7 @@ router.get('/campgrounds/:id/edit', isAuthorized, (req, res) => {
 
 /* this route is to update a particular campground */
 
-router.put('/campgrounds/:id', isAuthorized, (req, res) => {
+router.put('/campgrounds/:id', middleware.isAuthorized_campgrounds, (req, res) => {
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, campground) => {
         if (err) {
             console.log(err);
@@ -93,9 +94,7 @@ router.put('/campgrounds/:id', isAuthorized, (req, res) => {
 /* this route is DESTROY route -- Restful where you can delete a particular campground
 * Note: when you delete a campground the comments of the campground will remain  in the database do it later
 *  */
-router.delete('/campgrounds/:id', isAuthorized, (req, res) => {
-
-
+router.delete('/campgrounds/:id', middleware.isAuthorized_campgrounds, (req, res) => {
     Campground.findByIdAndRemove(req.params.id, (err, camp) => {
         if (err) {
             console.log(err);
@@ -107,23 +106,8 @@ router.delete('/campgrounds/:id', isAuthorized, (req, res) => {
     });
 });
 
-/**  isLoggedIn Middleware
- * @param req is refer to the request of the user
- * @param res is refer to the response of the server
- * @param next is refer to the next callback function which the route has
- * this middleware checks whether the use is logged in or no.
- * **/
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        // return next() means go next where it is the callback function in the route
-        return next();
-    }
-    res.redirect('/login');
 
-
-}
-
-/** isAuthorized Middleware
+/** isAuthorized_campgrounds Middleware
  * @param req is the request of the user
  * @param res is the response that will be send
  * @param next next to move to the route callback function
@@ -131,7 +115,7 @@ function isLoggedIn(req, res, next) {
  * put,delete,get operations.
  * **/
 
-function isAuthorized(req, res, next) {
+function isAuthorized_campgrounds(req, res, next) {
     // first we check if the user is logged in else we redirect the user from where he/she came
     if (req.isAuthenticated()) {
         Campground.findById(req.params.id, (err, camp) => {
