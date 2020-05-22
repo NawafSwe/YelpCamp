@@ -6,7 +6,7 @@
             <div class="list-group">
                 <li class="list-group-item">info3</li>
                 <li class="list-group-item active">info2</li>
-                 <li class="list-group-item">inf3</li>
+                 <li class="list-group-item">info3</li>
             </div>
         </div>
         <div class="col-md-9">
@@ -17,10 +17,13 @@
                     <h4><a href="#"><%=camp.name%></a></h4>
                      <p><%=camp.description%></p>
                      <h5>Created by : <strong><%=camp.user.username%></strong></h5>
+                     <!-- if user not logged in or not have the authorize to edit or delete camp -> hide edit and delete buttons-->
+                     <%if(currentUser && currentUser._id.equals(camp.user.id) ){%>
                      <a class="btn btn-lg btn-warning" href="/campgrounds/<%=camp.id%>/edit">Edit</a>
                            <form id="delete_form" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
                             <button class="btn btn-lg btn-danger">Delete</button>
                             </form>
+                           <%}%>
                 </div>
                 <div class="well">
                     <div class="text-right">
@@ -36,6 +39,9 @@
                          <p>
                          <%=comment.text%>
                          </p>
+                         <a href="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>/edit"
+                         class="btn btn-xs btn-warning pull-left ">Edit</a>
+
                      </div>
                     </div>
 

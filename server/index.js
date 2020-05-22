@@ -59,7 +59,7 @@ app.listen(port, () => {
 /* this is a middleware var user is to gives you if there is a user singed in or not  
 and it gives you the id of him and the username and it will be passed to all the routes in the templates.*/
 app.use((req, res, next) => {
-    res.locals.user = req.user;
+    res.locals.currentUser = req.user;
     //next will movie to the next middleware of the route;
     next();
 });

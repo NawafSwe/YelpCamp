@@ -46,6 +46,32 @@ router.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
     });
 });
 
+/* this route is SHOW restfulRoute where it shows a form to update a comment */
+router.get('/campgrounds/:id/comments/:comment_id/edit', (req, res) => {
+    Comment.findById(req.params.comment_id, (err, foundComment) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render('comments/edit', {campground_id: req.params.id, comment: foundComment});
+        }
+    });
+
+});
+
+/* this route is UPDATE restfulRoute where it updates a comment */
+router.put('/campgrounds/:id/comments/:comment_id', (req, res) => {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, comment) => {
+        if (err) {
+            res.redirect(`/campgrounds/${req.params.id}`);
+            console.log(err);
+        } else {
+            res.redirect(`/campgrounds/${req.params.id}`);
+
+        }
+    });
+});
+
+/* ----------------------------  MiddleWares && helper functions ---------------------------- */
 
 /* isLoggedIn function is considered to be a middleware that we need in the secret route where we need to check
 if the user is logged in or not */
@@ -58,8 +84,6 @@ function isLoggedIn(req, res, next) {
 
 
 }
-
-/* ---------------------- helper functions ------------- */
 
 
 module.exports = router;

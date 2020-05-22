@@ -93,7 +93,7 @@ router.put('/campgrounds/:id', isAuthorized, (req, res) => {
 /* this route is DESTROY route -- Restful where you can delete a particular campground
 * Note: when you delete a campground the comments of the campground will remain  in the database do it later
 *  */
-router.delete('/campgrounds/:id', (req, res) => {
+router.delete('/campgrounds/:id', isAuthorized, (req, res) => {
 
 
     Campground.findByIdAndRemove(req.params.id, (err, camp) => {
@@ -107,8 +107,12 @@ router.delete('/campgrounds/:id', (req, res) => {
     });
 });
 
-/* isLoggedIn function is considered to be a middleware that we need in the secret route where we need to check
-if the user is logged in or not */
+/**  isLoggedIn Middleware
+ * @param req is refer to the request of the user
+ * @param res is refer to the response of the server
+ * @param next is refer to the next callback function which the route has
+ * this middleware checks whether the use is logged in or no.
+ * **/
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         // return next() means go next where it is the callback function in the route
@@ -124,7 +128,7 @@ function isLoggedIn(req, res, next) {
  * @param res is the response that will be send
  * @param next next to move to the route callback function
  * this middleware is for checking if the user is have the right authorization to request a
- * put,delete,get operation.
+ * put,delete,get operations.
  * **/
 
 function isAuthorized(req, res, next) {
@@ -133,12 +137,13 @@ function isAuthorized(req, res, next) {
         Campground.findById(req.params.id, (err, camp) => {
             if (err) {
                 console.log(err);
+                //res.redirect('back') ---> redirect the user back from where he/she come from.
                 res.redirect('back');
             } else {
                 //we check if the user who requests to modify the campground he is the author,
                 // if the result of authentication is true then render the from
                 // we used .equals because mongo returns String.
-                if ((req.user._id).equals(camp.user.id)) {
+                if (camp.user.id.equals(req.user._id)) {
                     console.log('id of creator ' + camp.user.id + ' username is ' + camp.user.username);
                     console.log('id of requesting ' + req.user.id + ' username is ' + req.user.username);
                     return next();
