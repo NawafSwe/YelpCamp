@@ -65,11 +65,27 @@ router.put('/campgrounds/:id/comments/:comment_id', (req, res) => {
             res.redirect(`/campgrounds/${req.params.id}`);
             console.log(err);
         } else {
+            console.log(comment);
             res.redirect(`/campgrounds/${req.params.id}`);
 
         }
     });
 });
+
+/* this route is DESTROY restfulRoute where it deletes a comment */
+
+router.delete('/campgrounds/:id/comments/:comment_id', (req, res) => {
+    Comment.findByIdAndRemove(req.params.comment_id, (err, comment) => {
+        if (err) {
+            console.log(err);
+            res.redirect(`/campgrounds/${req.params.id}`);
+        } else {
+            console.log('deleted is ', comment.text)
+            res.redirect(`/campgrounds/${req.params.id}`);
+        }
+    });
+});
+
 
 /* ----------------------------  MiddleWares && helper functions ---------------------------- */
 
