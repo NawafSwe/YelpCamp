@@ -21,8 +21,7 @@ router.get('/campgrounds/:id/comments/new', isLoggedIn, (req, res) => {
 });
 
 /* this route is nested route because the each campground has relation with comments -- RestFul routes where it 
-    adds a comment 
-*/
+    adds a comment */
 router.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (err, campground) => {
         if (err) {
@@ -46,8 +45,8 @@ router.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
     });
 });
 
-/* this route is SHOW restfulRoute where it shows a form to update a comment */
-router.get('/campgrounds/:id/comments/:comment_id/edit', (req, res) => {
+/** this route is SHOW restfulRoute where it shows a form to update a comment  **/
+router.get('/campgrounds/:id/comments/:comment_id/edit', isAuthorized, (req, res) => {
     Comment.findById(req.params.comment_id, (err, foundComment) => {
         if (err) {
             console.log(err);
@@ -58,8 +57,8 @@ router.get('/campgrounds/:id/comments/:comment_id/edit', (req, res) => {
 
 });
 
-/* this route is UPDATE restfulRoute where it updates a comment */
-router.put('/campgrounds/:id/comments/:comment_id', (req, res) => {
+/* this route is UPDATE restfulRoute where it updates a comment **/
+router.put('/campgrounds/:id/comments/:comment_id', isAuthorized, (req, res) => {
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, comment) => {
         if (err) {
             res.redirect(`/campgrounds/${req.params.id}`);
@@ -73,8 +72,7 @@ router.put('/campgrounds/:id/comments/:comment_id', (req, res) => {
 });
 
 /* this route is DESTROY restfulRoute where it deletes a comment */
-
-router.delete('/campgrounds/:id/comments/:comment_id', (req, res) => {
+router.delete('/campgrounds/:id/comments/:comment_id', isAuthorized, (req, res) => {
     Comment.findByIdAndRemove(req.params.comment_id, (err, comment) => {
         if (err) {
             console.log(err);
@@ -101,5 +99,38 @@ function isLoggedIn(req, res, next) {
 
 }
 
+/** isAuthorized Middleware
+ * @param req is the request of the user
+ * @param res is the response that will be send
+ * @param next next to move to the route callback function
+ * this middleware is for checking if the user is have the right authorization to request a
+ * put,delete,get operations.
+ * **/
+
+function isAuthorized(req, res, next) {
+    //check if the user is logged in or not
+    if (req.isAuthenticated()) {
+        Comment.findById(req.params.comment_id, (err, comment) => {
+            if (err) {
+                console.log('requested from ', req.user.username);
+                console.log('owner is ', comment.author.username);
+                res.redirect('back');
+            } else {
+                if (req.user._id.equals(comment.author.id)) {
+                    console.log('requested from ', req.user.username);
+                    console.log('owner is ', comment.author.username);
+                    return next();
+                } else {
+                    console.log('requested from ', req.user.username);
+                    console.log('owner is ', comment.author.username);
+                    res.redirect('back');
+                }
+            }
+        });
+
+    } else {
+        res.redirect('back');
+    }
+}
 
 module.exports = router;

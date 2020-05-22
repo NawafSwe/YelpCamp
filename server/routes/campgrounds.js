@@ -143,7 +143,7 @@ function isAuthorized(req, res, next) {
                 //we check if the user who requests to modify the campground he is the author,
                 // if the result of authentication is true then render the from
                 // we used .equals because mongo returns String.
-                if (camp.user.id.equals(req.user._id)) {
+                if (req.user._id.equals(camp.user.id)) {
                     console.log('id of creator ' + camp.user.id + ' username is ' + camp.user.username);
                     console.log('id of requesting ' + req.user.id + ' username is ' + req.user.username);
                     return next();
