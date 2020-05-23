@@ -18,8 +18,9 @@ middleware_functions.isAuthorized_comments =
         if (req.isAuthenticated()) {
             Comment.findById(req.params.comment_id, (err, comment) => {
                 if (err) {
-                    console.log('requested from ', req.user.username);
-                    console.log('owner is ', comment.author.username);
+                    console.log(err)
+                    req.flash('error', 'Something went wrong please try again later');
+
                     res.redirect('back');
                 } else {
                     if (req.user._id.equals(comment.author.id)) {
@@ -29,12 +30,14 @@ middleware_functions.isAuthorized_comments =
                     } else {
                         console.log('requested from ', req.user.username);
                         console.log('owner is ', comment.author.username);
+                        req.flash('error', 'You are not authorized to edit this comment!');
                         res.redirect('back');
                     }
                 }
             });
 
         } else {
+            req.flash('error', 'You must be logged in first to add new comment!');
             res.redirect('back');
         }
     }
@@ -55,6 +58,7 @@ middleware_functions.isAuthorized_campgrounds =
                 if (err) {
                     console.log(err);
                     //res.redirect('back') ---> redirect the user back from where he/she come from.
+                    req.flash('error', 'Something went wrong please try again later');
                     res.redirect('back');
                 } else {
                     //we check if the user who requests to modify the campground he is the author,
@@ -67,12 +71,15 @@ middleware_functions.isAuthorized_campgrounds =
                     } else {
                         console.log('id of creator ' + camp.user.id + ' username is ' + camp.user.username);
                         console.log('id of requesting ' + req.user.id + ' username is ' + req.user.username);
+                        req.flash('error', 'You are not authorized to edit this campground');
                         res.redirect('back');
                     }
                 }
             });
-        } else
+        } else {
+            req.flash('error', 'You must be logged in first to add new comment!');
             res.redirect('back');
+        }
     }
 
 /** isLoggedIn Middleware
@@ -91,8 +98,8 @@ middleware_functions.isLoggedIn =
             // return next() means go next where it is the callback function in the route
             return next();
         }
+        req.flash('error', 'You must login');
         res.redirect('/login');
-
 
     }
 
