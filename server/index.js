@@ -4,6 +4,7 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     cors = require('cors'),
+    flash = require('connect-flash'),
     Campground = require('./models/Campground'),
     Comment = require('./models/Comment'),
     User = require('./models/User'),
@@ -25,6 +26,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
+app.use(flash());
 
 /*---------------------------- setting authentication options ----------------------------*/
 /* 
@@ -60,8 +62,12 @@ app.listen(port, () => {
 and it gives you the id of him and the username and it will be passed to all the routes in the templates.*/
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
+    //the messages will be included inside the headers.ejs
+    res.locals.error = req.flash("error");
+    res.locals.success = req.flash('success');
     //next will movie to the next middleware of the route;
     next();
+
 });
 
 /*---------------------------- app routes ---------------------------- */
@@ -72,12 +78,10 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
-
 /* ---------------------------- using routers ---------------------------- */
 app.use(authentication_routes);
 app.use(campgrounds_routes);
 app.use(comments_route);
-
 
 /* ---------------------------- helper functions ----------------------------*/
 

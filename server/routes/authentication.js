@@ -2,6 +2,7 @@
 const express = require('express'),
     router = express.Router(),
     User = require('../models/User'),
+    flash = require('connect-flash'),
     passport = require('passport');
 
 /* router is used to route express into index.js file */
@@ -20,9 +21,11 @@ router.post('/register', (req, res) => {
         req.body.password,
         (err, user) => {
             if (err) {
+                req.flash('error', 'username is used pick another username please!');
                 console.log('user already exist', err);
                 res.render('register');
             } else {
+                req.flash('success', `You Successfully registered   ${user.username} !`);
                 console.log(user);
                 passport.authenticate('local')(req, res, () => {
                     // if we created the account then we want to hide the login and signup links from the nav;

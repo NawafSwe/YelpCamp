@@ -6,11 +6,11 @@ const Comment = require('../models/Comment'),
 
 
 /** isAuthorized_comments Middleware
+ *  * this middleware is for checking if the user is have the right authorization to request a
+ * put,delete,get operations.
  * @param req is the request of the user
  * @param res is the response that will be send
  * @param next next to move to the route callback function
- * this middleware is for checking if the user is have the right authorization to request a
- * put,delete,get operations.
  * **/
 middleware_functions.isAuthorized_comments =
     function (req, res, next) {
@@ -41,11 +41,11 @@ middleware_functions.isAuthorized_comments =
 
 
 /** isAuthorized_campgrounds Middleware
+ *  this middleware is for checking if the user is have the right authorization to request a
+ * put,delete,get operations.
  * @param req is the request of the user
  * @param res is the response that will be send
  * @param next next to move to the route callback function
- * this middleware is for checking if the user is have the right authorization to request a
- * put,delete,get operations.
  * **/
 middleware_functions.isAuthorized_campgrounds =
     function (req, res, next) {
@@ -76,11 +76,13 @@ middleware_functions.isAuthorized_campgrounds =
     }
 
 /** isLoggedIn Middleware
+ * this isLoggedIn function is considered to be a middleware that we need in the secret route where we need to check
+ if the user is logged in or not.
+
  * @param req is the request of the user
  * @param res is the response that will be send
  * @param next next to move to the route callback function
- * this isLoggedIn function is considered to be a middleware that we need in the secret route where we need to check
- if the user is logged in or not.
+
  * **/
 
 middleware_functions.isLoggedIn =
