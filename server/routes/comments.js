@@ -15,6 +15,8 @@ router.get('/campgrounds/:id/comments/new', middleware.isLoggedIn, (req, res) =>
     Campground.findById(req.params.id, (err, camp) => {
         if (err) {
             console.log('err', err);
+            req.flash('error', 'cannot add a comment please try again');
+            res.redirect('back');
         } else {
             res.render('comments/new', {camp: camp});
         }
@@ -27,6 +29,8 @@ router.post('/campgrounds/:id/comments', middleware.isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (err, campground) => {
         if (err) {
             console.log('err', err);
+            req.flash('error', 'cannot add a comment please try again');
+            res.redirect('back');
         } else {
             Comment.create(req.body.comment, (err, comment) => {
                 if (err) {
@@ -39,6 +43,8 @@ router.post('/campgrounds/:id/comments', middleware.isLoggedIn, (req, res) => {
                     comment.save();
                     campground.comments.push(comment);
                     campground.save();
+
+                    req.flash('success', 'Comment was added successfully');
                     res.redirect('/Campgrounds/' + req.params.id);
                 }
             });
@@ -51,6 +57,9 @@ router.get('/campgrounds/:id/comments/:comment_id/edit', middleware.isAuthorized
     Comment.findById(req.params.comment_id, (err, foundComment) => {
         if (err) {
             console.log(err);
+            req.flash('error', 'cannot add a comment please try again');
+            res.redirect('back');
+
         } else {
             res.render('comments/edit', {campground_id: req.params.id, comment: foundComment});
         }
@@ -62,10 +71,13 @@ router.get('/campgrounds/:id/comments/:comment_id/edit', middleware.isAuthorized
 router.put('/campgrounds/:id/comments/:comment_id', middleware.isAuthorized_comments, (req, res) => {
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, comment) => {
         if (err) {
-            res.redirect(`/campgrounds/${req.params.id}`);
             console.log(err);
+            req.flash('error', 'cannot update a comment please try again');
+            res.redirect(`/campgrounds/${req.params.id}`);
+
         } else {
             console.log(comment);
+            req.flash('success', 'Comment was updated successfully');
             res.redirect(`/campgrounds/${req.params.id}`);
 
         }
@@ -77,9 +89,11 @@ router.delete('/campgrounds/:id/comments/:comment_id', middleware.isAuthorized_c
     Comment.findByIdAndRemove(req.params.comment_id, (err, comment) => {
         if (err) {
             console.log(err);
+            req.flash('error', 'You are not authorized to delete this comment!');
             res.redirect(`/campgrounds/${req.params.id}`);
         } else {
-            console.log('deleted is ', comment.text)
+            console.log('deleted is ', comment.text);
+            req.flash('success', 'Comment was successfully deleted');
             res.redirect(`/campgrounds/${req.params.id}`);
         }
     });
