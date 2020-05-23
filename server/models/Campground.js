@@ -18,7 +18,9 @@ const campgroundSchema = new mongoose.Schema({
             ref: 'User'
         },
         username: String
-    }
+    },
+    price: Number,
+
 });
 const Campground = mongoose.model('Campground', campgroundSchema);
 
