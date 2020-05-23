@@ -20,6 +20,10 @@ router.post('/register', (req, res) => {
         req.body.password,
         (err, user) => {
             if (err) {
+                /*
+                 you can use err.message to get different err messages but since I make the filed of the register is required no need for err message
+                 I am expecting that the user only can chose used username.
+                 */
                 req.flash('error', `the username ${user.username} is used pick another username please !`);
                 console.log('user already exist', err);
                 res.render('register');

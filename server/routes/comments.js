@@ -89,7 +89,6 @@ router.delete('/campgrounds/:id/comments/:comment_id', middleware.isAuthorized_c
     Comment.findByIdAndRemove(req.params.comment_id, (err, comment) => {
         if (err) {
             console.log(err);
-            req.flash('error', 'You are not authorized to delete this comment!');
             res.redirect(`/campgrounds/${req.params.id}`);
         } else {
             console.log('deleted is ', comment.text);
