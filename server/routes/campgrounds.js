@@ -2,7 +2,37 @@
 const express = require('express'),
     Campground = require('../models/Campground'),
     middleware = require('../middleware/index'),
+    path = require('path'),
     router = express.Router();
+
+
+/* ----------------------------  media config ---------------------------- */
+let multer = require('multer');
+//storage is used to specify the name of the file where below will be date then the file original file name
+let storage = multer.diskStorage({
+    filename: function (req, file, callback) {
+        callback(null, Date.now() + file.originalname);
+    }
+});
+
+//image filter is to specify the extension of the image e.g jpg|jpeg|png|gif
+let imageFilter = function (req, file, cb) {
+    // accept image files only
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+};
+
+let upload = multer({storage: storage, fileFilter: imageFilter})
+const dotenv = require('dotenv');
+dotenv.config();
+let cloudinary = require('cloudinary');
+cloudinary.config({
+    cloud_name: 'dw3pufmm8',
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 
 /* router is used to route express into index.js file */
@@ -33,7 +63,8 @@ router.get('/campgrounds/new', middleware.isLoggedIn, (req, res) => {
     by taking the data from a form
   */
 
-router.post('/campgrounds', middleware.isLoggedIn, (req, res) => {
+//upload.single('' here should goes the name='' of the input '')
+router.post("/campgrounds", middleware.isLoggedIn, (req, res) => {
     Campground.create(req.body.campground, (err, target) => {
         if (err) {
             console.log('err', err);
