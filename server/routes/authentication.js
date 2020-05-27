@@ -71,35 +71,46 @@ router.get('/logout', (req, res) => {
     req.flash('success', `Successfully logged out !`);
     res.redirect('/');
 });
-/* ------------------------------ */
+
+/* -------------------------------- reset password Routes -------------------------------- */
+
+/* '/forgot' is SHOW route where it shows a from to fill an email  */
 router.get('/forgot', function (req, res) {
     res.render('forgot');
 });
 
-router.post('/forgot', function (req, res, next) {
+/* '/forgot' is post route where it post  a from to the database to look for an email*/
+router.post('/forgot', (req, res, next) => {
+    /* async.waterfull is holding an array of functions where it call them one by one
+
+      */
     async.waterfall([
-        function (done) {
-            crypto.randomBytes(20, function (err, buf) {
+        (done) => {
+            //generating token
+            crypto.randomBytes(20, (err, buf) => {
                 let token = buf.toString('hex');
                 done(err, token);
             });
         },
-        function (token, done) {
-            User.findOne({email: req.body.email}, function (err, user) {
+        (token, done) => {
+            //finding the user who has the email
+            User.findOne({email: req.body.email}, (err, user) => {
                 if (!user) {
                     req.flash('error', 'No account with that email address exists.');
                     return res.redirect('/forgot');
                 }
-
+                //setting the token for a user
                 user.resetPasswordToken = token;
-                user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+                //setting the time for the token to expired after one hour from NOW
+                user.resetPasswordExpires = Date.now() + 3600000;
 
-                user.save(function (err) {
+                user.save((err) => {
                     done(err, token, user);
                 });
             });
         },
-        function (token, user, done) {
+        (token, user, done) => {
+            // creating an email to send to user
             let smtpTransport = nodemailer.createTransport({
                 service: 'Gmail',
                 auth: {
@@ -109,28 +120,32 @@ router.post('/forgot', function (req, res, next) {
             });
             let mailOptions = {
                 to: user.email,
-                from: 'nawafDeveloper2020@gmail.com',
-                subject: 'Node.js Password Reset',
+                from: 'Yelp Camp ',
+                subject: 'Password Reset',
                 text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                     'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
                     'http://' + req.headers.host + '/reset/' + token + '\n\n' +
                     'If you did not request this, please ignore this email and your password will remain unchanged.\n'
             };
-            smtpTransport.sendMail(mailOptions, function (err) {
+            smtpTransport.sendMail(mailOptions, (err) => {
                 console.log('mail sent');
                 req.flash('success', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
                 done(err, 'done');
             });
         }
-    ], function (err) {
+    ], (err) => {
         if (err) return next(err);
         res.redirect('/forgot');
     });
 });
 
-router.get('/reset/:token', function (req, res) {
-    User.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, function (err, user) {
+
+/* '/reset/:token' get route is to show the form of entering the new password */
+router.get('/reset/:token', (req, res) => {
+    //finding the user by his token and expired time token
+    User.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, (err, user) => {
         if (!user) {
+            // if it is not exist or expired
             req.flash('error', 'Password reset token is invalid or has expired.');
             return res.redirect('/forgot');
         }
@@ -138,24 +153,27 @@ router.get('/reset/:token', function (req, res) {
     });
 });
 
-router.post('/reset/:token', function (req, res) {
+/* '/reset/:token' post route is to post the form of entering the new password to the database and
+    confirm the new password then setting the token time and the token to be undefined
+*/
+router.post('/reset/:token', (req, res) => {
     async.waterfall([
-        function (done) {
+        (done) => {
             User.findOne({
                 resetPasswordToken: req.params.token,
                 resetPasswordExpires: {$gt: Date.now()}
-            }, function (err, user) {
+            }, (err, user) => {
                 if (!user) {
                     req.flash('error', 'Password reset token is invalid or has expired.');
                     return res.redirect('back');
                 }
                 if (req.body.password === req.body.confirm) {
-                    user.setPassword(req.body.password, function (err) {
+                    user.setPassword(req.body.password, (err) => {
                         user.resetPasswordToken = undefined;
                         user.resetPasswordExpires = undefined;
 
-                        user.save(function (err) {
-                            req.logIn(user, function (err) {
+                        user.save((err) => {
+                            req.logIn(user, (err) => {
                                 done(err, user);
                             });
                         });
@@ -166,7 +184,7 @@ router.post('/reset/:token', function (req, res) {
                 }
             });
         },
-        function (user, done) {
+        (user, done) => {
             let smtpTransport = nodemailer.createTransport({
                 service: 'Gmail',
                 auth: {
@@ -176,17 +194,17 @@ router.post('/reset/:token', function (req, res) {
             });
             let mailOptions = {
                 to: user.email,
-                from: 'nawafDeveloper2020@gmail.com',
+                from: 'Yelp Camp',
                 subject: 'Your password has been changed',
                 text: 'Hello,\n\n' +
                     'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
             };
-            smtpTransport.sendMail(mailOptions, function (err) {
+            smtpTransport.sendMail(mailOptions, (err) => {
                 req.flash('success', 'Success! Your password has been changed.');
                 done(err);
             });
         }
-    ], function (err) {
+    ], (err) => {
         res.redirect('/campgrounds');
     });
 });
