@@ -142,7 +142,7 @@ router.post('/forgot', (req, res, next) => {
 
 /* '/reset/:token' get route is to show the form of entering the new password */
 router.get('/reset/:token', (req, res) => {
-    //finding the user by his token and expired time token
+    //finding the user by his token and expired time token checking if it is greater than one hour from now
     User.findOne({resetPasswordToken: req.params.token, resetPasswordExpires: {$gt: Date.now()}}, (err, user) => {
         if (!user) {
             // if it is not exist or expired

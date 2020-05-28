@@ -72,11 +72,17 @@ app.use((req, res, next) => {
 
 /*---------------------------- app routes ---------------------------- */
 
-/* this route is the '/' is the initial route where render the home page*/
 
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
     res.render('home');
 });
+
+/* this route is the '/' is the initial route where render the home page*/
+app.get('/', (req, res) => {
+    res.redirect('/campgrounds');
+
+});
+
 
 /* ---------------------------- using routers ---------------------------- */
 app.use(authentication_routes);

@@ -41,15 +41,28 @@ cloudinary.config({
 
 /*  this route is the INDEX ROUTE  -- '/campgrounds' where it renders the campgrounds from the database */
 router.get('/campgrounds', (req, res) => {
-    Campground.find({}, (err, camps) => {
-        if (err) {
-            console.log('error', err);
-            req.flash('error', 'No campgrounds was found');
-            res.redirect('/');
-        } else {
+    if (req.query.search) {
+        const regex = new RegExp(escapeRegex(req.query.search, 'gi'));
+        Campground.find({name: regex}, (err, camps) => {
+
+            if (err) {
+                req.flash('error', err.message);
+                res.redirect('back');
+            }
             res.render('campgrounds/index', {camp_grounds_list: camps});
-        }
-    });
+        });
+
+    } else {
+        Campground.find({}, (err, camps) => {
+
+            if (err) {
+                req.flash('error', err.message);
+                res.redirect('back');
+            }
+            res.render('campgrounds/index', {camp_grounds_list: camps});
+        });
+
+    }
 });
 
 
@@ -154,4 +167,8 @@ router.delete('/campgrounds/:id', middleware.isAuthorized_campgrounds, (req, res
     });
 });
 
+/* ---------------------------- Helper functions ---------------------------- */
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 module.exports = router;

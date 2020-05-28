@@ -10,10 +10,16 @@
      <nav class="navbar navbar-default fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a href="/" class="navbar-brand">Yelp Camp</a>
+               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+      </button>
+                <a href="/home" class="navbar-brand">Yelp Camp</a>
             </div>
 
-            <div class="collapse navbar-collapse">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" >
                 <ul class=" nav navbar-nav navbar-right">
                 <!-- if user not logged in hide some logic to display links-->
                     <%if(!currentUser){%>

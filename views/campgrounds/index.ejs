@@ -9,7 +9,20 @@
         <div class="container">
             <h1> welcome Yelp Camp!</h1>
         <p>View our hand-picked campgrounds from all over the world</p>
-        <p><a class="btn-lg btn-primary" href="campgrounds/new">create new campground</a></p>
+
+        <p>
+            <form class="form-inline" action="/campgrounds" method="GET">
+            <div class="form-group">
+              <input name="search" type="text" class="form-control" placeholder="Campground Search ... ">
+              <input  type="submit" class="btn btn-default" value="Search">
+            </div>
+             </form>
+       </p>
+
+        <p>
+        <a class="btn-lg btn-primary" href="campgrounds/new">create new campground</a>
+        </p>
+
         </div>
         
     </header>
@@ -36,7 +49,5 @@
 
     </div>
    
-   
-
 
 <%- include ('../partials/footer') %>
