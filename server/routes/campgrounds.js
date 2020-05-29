@@ -2,7 +2,6 @@
 const express = require('express'),
     Campground = require('../models/Campground'),
     middleware = require('../middleware/index'),
-    path = require('path'),
     router = express.Router();
 
 
