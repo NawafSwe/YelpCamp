@@ -1,18 +1,74 @@
 # YelpCamp Project 
 
 <h3>Description:</h3>
-<p>Yelp camp project is a web application that allows the user to:</p>
+<a>Yelp camp project is a web application that was developed using MEN stack 
+using MongoDb and express, Nodejs ,furthermore <a href="https://getbootstrap.com/docs/3.3/"> bootstrap3</a> for styling
+ allows the user to:</p>
 <ol>
 <li>
-Create Account
+Create Account and use it to utilize the website like creating a campgrounds and adding comments to a campground
 </li>
 <li>
-Add and remove, edit Campgrounds
+Add and remove, edit Campgrounds,
+
 </li>
 <li>
 Add and remove, edit Comments
 </li>
 </ol>
+
+
+#models:
+<p>There are three models are used listed below:</p>
+<ol>
+<li>User, where the user has the following attributes:
+<ul>
+<li>username</li>
+<li>email</li>
+<li>password</li>
+<li>resetPasswordToken</li>
+<li>resetPasswordExpires</li>
+</ul>
+
+</li>
+<li>Campground, where the user has the following attributes:
+<ul>
+<li>name</li>
+<li>image_url</li>
+<li>description</li>
+<li>comments</li>
+<li>user</li>
+<li>price</li>
+
+</ul>
+</li>
+
+<li>Comment,  where the user has the following attributes:
+<ul>
+<li>author</li>
+<li>text</li>
+</ul>
+</li>
+</ol>
+
+
+
+#strategies:
+<section>
+<h1>Front End Process</h1>
+<p>The front end 'client side' I have used ejs to make the connection between the server and the front-end more easier 
+and reasonable. where we can get the data from the data base and pass it easily to the ejs file and use it.
+for more information how ejs works,syntax please visit <a href="https://ejs.co/">ejs tutorials</a>.
+</p>
+</section>
+
+<section>
+<h1>Back End process</h1>
+<p>the backend end 'server side' was developed using nodejs and mongodb and using RestFul routes concepts in naming the routes 
+all the code are well commented and documented for more information about how RestFul routes please visit <a href="https://medium.com/@shubhangirajagrawal/the-7-restful-routes-a8e84201f206">RestFul Routes</a>.
+
+</p>
+</section>
 
 #Getting started: 
 Note:<h5>this project is running locally using mongodb</h5>
@@ -20,4 +76,7 @@ Note:<h5>this project is running locally using mongodb</h5>
 * open the terminal in the root directory and run `npm install` to install all the packages required
 * finally in the terminal run the command `nodemon` and `mongod` to get the database and the app running on port 3000
 feel free to change the port number!
+
+
+
 
