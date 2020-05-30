@@ -71,7 +71,8 @@ all the code are well commented and documented for more information about how Re
 </section>
 
 #Getting started: 
-Note:<h5>this project is running locally using mongodb</h5>
+
+<strong>Note:</strong><h5>this project is running locally using mongodb</h5>
 * before starting make sure that you have node installed in your machine and mongodb 
 * open the terminal in the root directory and run `npm install` to install all the packages required
 * finally in the terminal run the command `nodemon` and `mongod` to get the database and the app running on port 3000
