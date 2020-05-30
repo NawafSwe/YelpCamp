@@ -16,9 +16,11 @@ Add and remove, edit Campgrounds,
 Add and remove, edit Comments
 </li>
 </ol>
+<p>user can add create campground with a price and give it a comment and description and an image, also a comments can be added to particular campground
+</p>
 
 
-#models:
+#Models:
 <p>There are three models are used listed below:</p>
 <ol>
 <li>User, where the user has the following attributes:
@@ -53,7 +55,7 @@ Add and remove, edit Comments
 
 
 
-#strategies:
+#Strategies:
 <section>
 <h1>Front End Process</h1>
 <p>The front end 'client side' I have used ejs to make the connection between the server and the front-end more easier 
@@ -66,17 +68,19 @@ for more information how ejs works,syntax please visit <a href="https://ejs.co/"
 <h1>Back End process</h1>
 <p>the backend end 'server side' was developed using nodejs and mongodb and using RestFul routes concepts in naming the routes 
 all the code are well commented and documented for more information about how RestFul routes please visit <a href="https://medium.com/@shubhangirajagrawal/the-7-restful-routes-a8e84201f206">RestFul Routes</a>.
-
 </p>
+<h4>Privacy</h4>
+<p>The package Passport was used to do the authentication process and hashing the passwords of the users, for more information 
+about the package passport please visit <a href="https://www.npmjs.com/package/passport">here</a></p>
 </section>
 
 #Getting started: 
 
 <strong>Note:</strong><h5>this project is running locally using mongodb</h5>
 * before starting make sure that you have node installed in your machine and mongodb 
-* open the terminal in the root directory and run `npm install` to install all the packages required
+* open the terminal in the root directory and run `npm install` to install all the packages required to run this project on your local machine 
 * finally in the terminal run the command `nodemon` and `mongod` to get the database and the app running on port 3000
-feel free to change the port number!
+ feel free to change the port number!
 
 
 
