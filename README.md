@@ -20,7 +20,7 @@ Add and remove, edit Comments
 </p>
 
 
-#Models:
+# Models:
 <p>There are three models are used listed below:</p>
 <ol>
 <li>User, where the user has the following attributes:
@@ -55,7 +55,7 @@ Add and remove, edit Comments
 
 
 
-#Strategies:
+# Strategies:
 <section>
 <h1>Front End Process</h1>
 <p>The front end 'client side' I have used ejs to make the connection between the server and the front-end more easier 
