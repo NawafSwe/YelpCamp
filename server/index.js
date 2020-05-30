@@ -5,14 +5,11 @@ const express = require('express'),
     methodOverride = require('method-override'),
     cors = require('cors'),
     flash = require('connect-flash'),
-    Campground = require('./models/Campground'),
-    Comment = require('./models/Comment'),
     User = require('./models/User'),
     db_connection = require('./configuration/db_connection'),
     passport = require('passport'),
     localStrategy = require('passport-local'),
     passportLocalMongoose = require('passport-local-mongoose');
-
 /*---------------------------- importing the routers ----------------------------*/
 const authentication_routes = require('./routes/authentication'),
     campgrounds_routes = require('./routes/campgrounds'),
@@ -50,6 +47,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 /*---------------------------- testing the connection of the server ----------------------------*/
+const dotenv = require('dotenv').config();
 const port = 3000;
 app.listen(port, () => {
     console.log(`server is running on ${port}`);
