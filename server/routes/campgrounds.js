@@ -47,8 +47,9 @@ router.get('/campgrounds', (req, res) => {
             if (err) {
                 req.flash('error', err.message);
                 res.redirect('back');
+            } else {
+                res.render('campgrounds/index', {camp_grounds_list: camps});
             }
-            res.render('campgrounds/index', {camp_grounds_list: camps});
         });
 
     } else {
