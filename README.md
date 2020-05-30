@@ -74,7 +74,7 @@ all the code are well commented and documented for more information about how Re
 about the package passport please visit <a href="https://www.npmjs.com/package/passport">here</a></p>
 </section>
 
-#Getting started: 
+# Getting started: 
 
 <strong>Note:</strong><h5>this project is running locally using mongodb</h5>
 * before starting make sure that you have node installed in your machine and mongodb 
