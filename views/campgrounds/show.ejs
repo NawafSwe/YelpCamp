@@ -18,7 +18,7 @@
                      <p><%=camp.description%></p>
                      <h5>Created by : <strong><%=camp.user.username%></strong></h5>
                      <!-- if user not logged in or not have the authorize to edit or delete camp -> hide edit and delete buttons-->
-                     <%if(currentUser && currentUser._id.equals(camp.user.id) ){%>
+                     <%if(currentUser && currentUser._id.equals(camp.user.id) || currentUser.isAdmin ){%>
                      <a class="btn btn-lg btn-warning" href="/campgrounds/<%=camp.id%>/edit">Edit</a>
                            <form class="delete_form" action="/campgrounds/<%=camp._id%>?_method=DELETE" method="POST">
                             <button class="btn btn-lg btn-danger">Delete</button>
@@ -40,7 +40,7 @@
                          <%=comment.text%>
                          </p>
                          <!-- if auth and logged in  -> do not hide the buttons -->
-                      <%if(currentUser && currentUser._id.equals(comment.author.id) ){%>
+                      <%if(currentUser && currentUser._id.equals(comment.author.id)  || currentUser.isAdmin ){%>
                          <a href="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>/edit"
                          class="btn btn-xs btn-warning">Edit</a>
                          <form class="delete_form" action="/campgrounds/<%=camp._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">

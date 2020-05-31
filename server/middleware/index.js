@@ -23,8 +23,8 @@ middleware_functions.isAuthorized_comments =
 
                     res.redirect('back');
                 } else {
-                    if (req.user._id.equals(comment.author.id)) {
-                        console.log('requested from ', req.user.username);
+                    if (req.user._id.equals(comment.author.id) || req.user.isAdmin) {
+                        console.log('requested from ', req.user.username + "and it is " + req.user.isAdmin);
                         console.log('owner is ', comment.author.username);
                         return next();
                     } else {
@@ -64,7 +64,7 @@ middleware_functions.isAuthorized_campgrounds =
                     //we check if the user who requests to modify the campground he is the author,
                     // if the result of authentication is true then render the from
                     // we used .equals because mongo returns String.
-                    if (req.user._id.equals(camp.user.id)) {
+                    if (req.user._id.equals(camp.user.id) || req.user.isAdmin) {
                         console.log('id of creator ' + camp.user.id + ' username is ' + camp.user.username);
                         console.log('id of requesting ' + req.user.id + ' username is ' + req.user.username);
                         return next();
