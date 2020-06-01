@@ -8,9 +8,9 @@ const express = require('express'),
     passport = require('passport');
 
 
-/* router is used to route express into index.js file */
+/* ---------------------------- router is used to route express into index.js file ---------------------------- */
 
-/* ---------------------------- Authentication routes ----------------------------  */
+/* ---------------------------- Authentication routes ---------------------------- */
 
 /* this route '/register' is for showing the form of the register to create new account*/
 router.get('/register', (req, res) => {

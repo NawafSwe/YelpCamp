@@ -20,6 +20,7 @@ const campgroundSchema = new mongoose.Schema({
         username: String
     },
     price: Number,
+    createdAt: {type: Date, default: Date.now}
 
 });
 const Campground = mongoose.model('Campground', campgroundSchema);

@@ -16,7 +16,7 @@
                     <h4 class="pull-right"><%=camp.price%>$/night</h4>
                     <h4><a href="#"><%=camp.name%></a></h4>
                      <p><%=camp.description%></p>
-                     <h5>Created by : <strong><%=camp.user.username%></strong></h5>
+                     <h5>Created by : <strong><%=camp.user.username%></strong>,<em><%=moment(camp.createdAt).fromNow()%></em></h5>
                      <!-- if user not logged in or not have the authorize to edit or delete camp -> hide edit and delete buttons-->
                      <%if(currentUser && currentUser._id.equals(camp.user.id) || currentUser.isAdmin ){%>
                      <a class="btn btn-lg btn-warning" href="/campgrounds/<%=camp.id%>/edit">Edit</a>
@@ -35,7 +35,7 @@
                     <div class="row">
                      <div class="col-md-12">
                          <strong><%=comment.author.username%></strong>
-                         <span class="pull-right">10 days ago</span>
+                         <span class="pull-right"><em><%=moment(comment.createdAt).fromNow()%></em></span>
                          <p>
                          <%=comment.text%>
                          </p>

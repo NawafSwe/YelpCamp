@@ -9,6 +9,7 @@ const express = require('express'),
     db_connection = require('./configuration/db_connection'),
     passport = require('passport'),
     localStrategy = require('passport-local'),
+    moment = require('moment'),
     passportLocalMongoose = require('passport-local-mongoose');
 /*---------------------------- importing the routers ----------------------------*/
 const authentication_routes = require('./routes/authentication'),
@@ -62,6 +63,7 @@ app.use((req, res, next) => {
     //the messages will be included inside the headers.ejs
     res.locals.error = req.flash("error");
     res.locals.success = req.flash('success');
+    res.locals.moment = moment;
     //next will movie to the next middleware of the route;
     next();
 
